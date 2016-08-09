@@ -3,53 +3,50 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="/plugins/canvasjs/jquery.canvasjs.min.js"></script>
     <script type="text/javascript">
-  window.onload = function () {
-    var chart = new CanvasJS.Chart("chartContainer",
-    {
-      title:{
-        text: "Top Oil Reserves"
-      },
-      animationEnabled: true,
-      axisY: {
-        title: "Reserves(MMbbl)"
-      },
-      legend: {
-        verticalAlign: "bottom",
-        horizontalAlign: "center"
-      },
-      theme: "theme2",
-      data: [
-
-      {
-        type: "column",
-        showInLegend: true,
-        legendMarkerColor: "grey",
-        legendText: "MMbbl = one million barrels",
-        dataPoints: [
-        {y: 297571, label: "Venezuela"},
-        {y: 267017,  label: "Saudi" },
-        {y: 175200,  label: "Canada"},
-        {y: 154580,  label: "Iran"},
-        {y: 116000,  label: "Russia"},
-        {y: 97800, label: "UAE"},
-        {y: 20682,  label: "US"},
-        {y: 20350,  label: "China"}
-        ]
-      }
-      ]
-    });
-
-    chart.render();
+      $(function(){
+        $("#chartContainer")
+        .CanvasJSChart({
+          data: [
+            {
+              type: "spline",
+              dataPoints: [
+                {X: 0, y: 0},
+                {X: 5, y: 5},
+                {X: 10, y: 10},
+                {X: 20, y: 20},
+                {X: 30, y: 30},
+                {X: 40, y: 40},
+                {X: 50, y: 50},
+                {X: 60, y: 60},
+                {X: 70, y: 70},
+                {X: 80, y: 80}
+              ]
+            }
+          ]
+        });
+        $("#addDataPoint").click(function () {
+		var chart = $("#chartContainer").CanvasJSChart();
+		var length = chart.options.data[0].dataPoints.length;
+		chart.options.data[0].dataPoints.push({ x: (length + 1) * 10 * Math.random(), y: Math.round((30 - Math.random() * 10)) });
+		chart.render();
+	});
+  var i = 0;
+  while(i<500){
+      $('#addDataPoint').trigger('click');
+      i++;
   }
+      });
   </script>
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
 
-    <div id="chartContainer" style="height: 300px; width: 100%;">
-
+    <div id="chartContainer" style="height: 300px; width: 50%;"></div>
+    <div id="chartContainer2" style="height: 300px; width: 50%;"></div>
+<button id="addDataPoint" style="position:absolute;right:0px;margin-right:10px;">Add Data Point</button>
   </body>
 </html>
