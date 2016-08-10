@@ -1,52 +1,97 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="/plugins/canvasjs/jquery.canvasjs.min.js"></script>
-    <script type="text/javascript">
-      $(function(){
-        $("#chartContainer")
-        .CanvasJSChart({
-          data: [
-            {
-              type: "spline",
-              dataPoints: [
-                {X: 0, y: 0},
-                {X: 5, y: 5},
-                {X: 10, y: 10},
-                {X: 20, y: 20},
-                {X: 30, y: 30},
-                {X: 40, y: 40},
-                {X: 50, y: 50},
-                {X: 60, y: 60},
-                {X: 70, y: 70},
-                {X: 80, y: 80}
-              ]
-            }
-          ]
-        });
-        $("#addDataPoint").click(function () {
-		var chart = $("#chartContainer").CanvasJSChart();
-		var length = chart.options.data[0].dataPoints.length;
-		chart.options.data[0].dataPoints.push({ x: (length + 1) * 10 * Math.random(), y: Math.round((30 - Math.random() * 10)) });
-		chart.render();
-	});
-  var i = 0;
-  while(i<500){
-      $('#addDataPoint').trigger('click');
-      i++;
-  }
-      });
-  </script>
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script src="/plugins/makeChart.js"></script>
+  <script src="/plugins/canvasjs/jquery.canvasjs.min.js"></script>
+  <script type="text/javascript">
 
-    <div id="chartContainer" style="height: 300px; width: 50%;"></div>
-    <div id="chartContainer2" style="height: 300px; width: 50%;"></div>
+
+    $(function(){
+      $("#chartContainer")
+              .CanvasJSChart({
+                title: {
+                  text: 'Awesome on a nightly scale'
+                },
+                data: [
+                  {
+                    type: "line",
+                    dataPoints: [
+
+                    ]
+                  }
+                ]
+              });
+      $("#chartContainer2")
+              .CanvasJSChart({
+                title: {
+                  text: 'Randomness per mathswag point',
+                  fontColor: 'green',
+                  fontSize: 60
+                },
+                data: [
+                  {
+                    type: "spline",
+                    dataPoints: [
+
+                    ]
+                  },
+                  {
+                    type: "spline",
+                    dataPoints: [
+
+                    ]
+                  }
+                ]
+              });
+      $("#addDataPoint").click(function () {
+        var chart = $("#chartContainer").CanvasJSChart();
+        var length = chart.options.data[0].dataPoints.length;
+        chart.options.data[0].dataPoints.push({ x: (length + 1) * 10 , y: Math.round((30 - Math.random() * 10)) }) * 4;
+        chart.render();
+      });
+      $('#initChart').click(function(){
+        var array = [<%=array%>];
+        var chart = $("#chartContainer").CanvasJSChart();
+        var length = chart.options.data[0].dataPoints.length;
+        for(i=0;i<array.length;i++){
+          chart.options.data[0].dataPoints.push({ x: i , y: array[i] });
+
+          chart.render();
+        }
+      });
+      var decodeHtmlEntity = function(str) {
+        return str.replace(/&#(\d+);/g, function(match, dec) {
+          return String.fromCharCode(dec);
+        });
+      };
+      $('#initChart2').click(function(){
+        var array = [JSON.parse(decodeHtmlEntity("<%=array%>"))];
+        console.log(array);
+        var chart = $("#chartContainer").CanvasJSChart();
+        var length = chart.options.data[0].dataPoints.length;
+        for(i=0;i<array.length;i++){
+          chart.options.data[0].dataPoints.push({ x: i , y: array[i].cmpsec });
+          chart.options.data[1].dataPoints.push({ x: i , y: array[i].knot });
+
+          chart.render();
+        }
+      });
+
+
+    });
+  </script>
+</head>
+<body>
+<h1><%= title %></h1>
+<p>Welcome to <%= title %></p>
+
+<div id="chartContainer" style="height: 300px; width: 50%;"></div>
+<div id="chartContainer2" style="height: 300px; width: 50%;"></div>
 <button id="addDataPoint" style="position:absolute;right:0px;margin-right:10px;">Add Data Point</button>
-  </body>
+<button id="initChart" >Initialize Chart</button>
+<button id="initChart2" >Initialize Chart2</button>
+</body>
 </html>

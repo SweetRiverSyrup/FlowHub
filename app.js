@@ -4,15 +4,28 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mysql = require('mysql');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+
+var conn = mysql.createConnection({
+  host: '130.199.94.196', //the ip of the computer running the database, should be localhost when not in testing mode
+  user: 'root', //DO NOT CHANGE THIS IN MARIA
+  password: 'alpine', //DO NOT CHANGE THIS IN MARIA
+  database: 'pi' //DO NOT CHANGE THIS IN MARIA
+});
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(function(req, res, next){
+  req.conn = conn;
+  next();
+});
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
