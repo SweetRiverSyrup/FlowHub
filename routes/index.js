@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
         var addedTotal = dat.tideChangeAtTime0 + dat.tideChangeAtTime10 + dat.tideChangeAtTime20 + dat.tideChangeAtTime30;
         if(addedTotal = dat.totalTideChange){
           array.push(addedTotal);
-          headers = {title: 'Flowhub', array: array};
+          headers = {title: 'Flowhub', array2: array, array: ''};
         }else{
           console.log("error");
           headers = {title: 'Error'};
@@ -32,7 +32,7 @@ router.get('/', function(req, res, next) {
       var array = [];
       data.forEach(function(dat){
 
-        array.push("{ cmpsec: \"" + dat.currentSpeedCmPerSec + "\", 'knots':\"" + dat.currentSpeedKnots + "\"}");
+        array.push("{cmpsec: " + dat.currentSpeedCmPerSec + ", knot: " + dat.currentSpeedKnots.replace(/knts/gi, '') + "}");
         headers = {title: 'FlowHub', array: array};
       });
     }
@@ -40,6 +40,10 @@ router.get('/', function(req, res, next) {
     res.render('index', headers);
   });
 
+});
+
+router.get('/accounts', function(req, res, next){
+  res.render('accounts', {title: "Flow"});
 });
 
 module.exports = router;

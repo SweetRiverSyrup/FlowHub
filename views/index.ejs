@@ -62,15 +62,12 @@
           chart.render();
         }
       });
-      var decodeHtmlEntity = function(str) {
-        return str.replace(/&#(\d+);/g, function(match, dec) {
-          return String.fromCharCode(dec);
-        });
-      };
+
+
       $('#initChart2').click(function(){
-        var array = [JSON.parse(decodeHtmlEntity("<%=array%>"))];
+        //var array = [<%=array%>];
         console.log(array);
-        var chart = $("#chartContainer").CanvasJSChart();
+        var chart = $("#chartContainer2").CanvasJSChart();
         var length = chart.options.data[0].dataPoints.length;
         for(i=0;i<array.length;i++){
           chart.options.data[0].dataPoints.push({ x: i , y: array[i].cmpsec });
